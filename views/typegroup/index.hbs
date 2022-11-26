@@ -1,0 +1,146 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-4">
+                    <h5 class="card-title mb-0">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel <i class="fas fa-file ml-2"></i></button>
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newtypegroup">Добавить</button>
+                    </div>
+                </div>
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 157px;" aria-sort="ascending">№</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Название</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Статус</th>
+                                        <th ></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each typegroup}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{title}}</td>
+                                        <td>
+                                            <span class="badge {{class}}">{{status}}</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick="editTypeGroup('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatetypegroup" class="btn btn-warning ml-2">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <a href="/typegroup/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                            <i class="fas fa-trash"></i></a>
+                                        </td>
+                                        
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                
+                            </table>
+                            <table id="calc_table"  style="display: none;">
+                                <thead>
+                                <tr role="row">
+                                    <th>№</th>
+                                    <th>Название</th>
+                                    <th>Статус</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each typegroup}}
+                                    <tr>
+                                        <td >{{index}}</td>
+                                        <td>{{title}}</td>
+                                        <td>
+                                            <span class="badge {{class}}">{{status}}</span>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newtypegroup" tabindex="-1" aria-labelledby="newtypegroup" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить тип группа</h5>
+                <button type="button" class="btn-close" onclick="resetTypegroup()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/typegroup/" method="post" name="newtypegroup" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="title" class="form-control" id="floatingInputTypegroup" placeholder="" required>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInputTypegroup">Тип класса</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckTypegroup1">
+                        <label class="form-check-label" for="exampleCheckTypegroup1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatetypegroup" tabindex="-1" aria-labelledby="updatetypegroup" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить тип группа</h5>
+                <button type="button" class="btn-close" onclick="resetTypegroup()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/typegroup/save" method="post" name="updatetypegroup" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="title" class="form-control" id="floatingInputTypegroup1" placeholder="" required>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInputTypegroup1">Тип класса</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckTypegroup2">
+                        <label class="form-check-label" for="exampleCheckTypegroup2">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    let newFormTypegroup = document.forms.newtypegroup
+    let upFormTypegroup = document.forms.updatetypegroup
+    const editTypeGroup = (id) => {
+        fetch(`/typegroup/edit/${id}`)
+        .then(res => res.json())
+        .then(typegroup => {
+            upFormTypegroup._id.value = id 
+            upFormTypegroup.title.value = typegroup.title
+            upFormTypegroup.status.checked = typegroup.status == 1 ? true : false
+        }).catch(e=>console.error(e))
+    }
+
+    function resetTypegroup() {
+        newFormTypegroup.reset()
+        upFormTypegroup.reset()
+    }
+
+</script>

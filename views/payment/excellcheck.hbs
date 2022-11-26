@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center pr-1 mb-5">
+                    <div class="d-flex justify-content-start align-items-center pr-1">
+                        <a href="/payment/"
+                            class="ml-2 btn btn-primary mr-2">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h4 class="card-title mb-0 ml-2">{{title}}</h4>
+                    </div>
+                    <button class="btn btn-primary mr-2 excell-btn" onclick="ExportToExcel('xls')">Export to Excell <i class="fas fa-file ml-2"></i></button>
+                </div>
+                <div class="tablecheck">
+                    <table border="1" id="calc_table">
+
+                            <thead>
+                                <tr class="text-center">
+                                    <th colspan="9">КВИТАНЦИЯ №__</th>
+                                </tr>
+                                <tr class="text-center">
+                                    <th colspan="9"><b>Дата: </b>{{data}}</th>
+                                </tr>
+                                <tr></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">Кимдан</td>
+                                    <td colspan="4">{{payment.pupil.name}}</td>
+                                    <td colspan="3" rowspan="2" class="text-center align-items-center"><b>2020 8000 1002 3165 6001</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td colspan="4" class="text-end">Сонли хисоб ракамига утказиш учун: </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" >Олувчи банк:</td>
+                                    <td colspan="4">ТОШКЕНТ Ш., "ИПОТЕКА-БАНК"  АТИБ <br> ТОШКЕНТ ВИЛОЯТ ФИЛИАЛИ</td>
+                                    <td colspan="3" rowspan="2" class="text-center align-items-center"><b>Сумма: </b> {{summa}} сум</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" >Олувчи:</td>
+                                    <td colspan="7" >NTM "ABCO INTERNATIONAL ACCOUNTING AND FINANCE ACADEMY"</td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="4" rowspan="3">Бухгалтер _______</td>
+                                    <td colspan="5" rowspan="3">Пулларни кабул килган кассир _______</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" rowspan="3"></td>
+                                    <td colspan="5" rowspan="3"></td>
+                                </tr>
+                            </tfoot>
+                    </table>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .tablecheck {
+        display: flex;
+        justify-content: center;
+    }
+    table {
+        width: 80%;
+        margin: 0 auto;
+    }
+    table, th, td {
+        border:1px solid black;
+    }
+    .excell-btn:hover {background-color: green;color: white}
+</style>
+
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var ExportToExcel = (function () {
+        // Define your style class template.
+        var style = "<style> th, td { border: 1px solid #000000; }tfoot td { border: 0 }</style>";
+        var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' + style + '</head><body><table>{table}</table><table>{table}</table><table>{table}</table></body></html>'
+                , base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        }
+                , format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+        }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById('calc_table')
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML  }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+    </script>

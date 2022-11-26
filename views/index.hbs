@@ -1,0 +1,99 @@
+
+  <div class="row">
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Сотрудники</h5>
+          <h2>{{workersCount}}</h2>
+          <p>Общая количество</p>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Ученики</h5>
+          <h2>{{pupilCount}}</h2>
+          <p>Общая количество</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Группы</h5>
+          <h2>{{groupCount}}</h2>
+          <p>Общая количество</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Направление</h5>
+          <h2>{{courseCount}}</h2>
+          <p>Общая количество</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-lg-8">
+      <div class="card table-widget">
+        <div class="card-body">
+          <h5 class="card-title">Последные оплаты</h5>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Ученик</th>
+                  <th scope="col">Сумма заказа</th>
+                  <th scope="col">Дата</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each payment}}
+                <tr>
+                  <th scope="row">{{who.name}}</th>
+                  <td>{{summa}} сум</td>
+                  <td>{{today}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-sm-12 col-md-4">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Список предподаватели</h5>
+          {{#each workers}}
+          <div class="transactions-list">
+            <div class="tr-item">
+              <div class="tr-company-name">
+                <div class="tr-icon tr-card-icon tr-card-bg-primary text-primary">
+                  <i data-feather="user"></i>
+                </div>
+                <div class="tr-text">
+                  <a href="#">
+                    <h4>{{name}}</h4>
+                  </a>
+                  <p>{{phone}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>

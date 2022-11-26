@@ -1,0 +1,307 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-3">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel <i class="fas fa-file ml-2"></i></button>
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newworker">Добавить</button>
+                    </div>
+                </div>
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 15px;" aria-sort="ascending">№</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Имя и фамилия</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Номер телефона</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Зарплата</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Пол</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Telegram</th>
+                                        <th ></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each workers}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{name}}</td>
+                                        <td>{{phone}}</td>
+                                        <td>{{salary}} сум</td>
+                                        <td>{{gender}}</td>
+                                        <td>{{telegram}}</td>
+                                        <td class="text-right">
+                                            <button onclick="editWorker('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updateworker" class="btn btn-warning ml-2">
+                                                <i class="fas fa-pen"></i></button>
+                                            <a href="/workers/delete/{{_id}}" 
+                                                onclick="return confirm('Вы уверены?')" 
+                                                class="ml-2 btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                
+                            </table>
+
+                            <table id="calc_table"  style="display: none" >
+                                <thead>
+                                <tr role="row">
+                                    <th>№</th>
+                                    <th>Имя и фамилия</th>
+                                    <th>Номер телефона</th>
+                                    <th>Зарплата</th>
+                                    <th>Пол</th>
+                                    <th>Telegram</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each workers}}
+                                    <tr>
+                                        <td>{{index}}</td>
+                                        <td>{{name}}</td>
+                                        <td>{{phone}}</td>
+                                        <td>{{salary}} сум</td>
+                                        <td>{{gender}}</td>
+                                        <td>{{telegram}}</td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newworker" tabindex="-1" aria-labelledby="newworker" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить нового сотрудник</h5>
+                <button type="button" class="btn-close" onclick="resetWorker()"  data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/workers/" method="post" name="newworker" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="login" class="form-control" id="floatingInputWorker" placeholder="Логин" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker">Логин</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="password" name="password" class="form-control" id="floatingInputWorker1" placeholder="Пароль" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker1">Пароль</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="name" class="form-control" id="floatingInputWorker2" placeholder="Фамилия и Имя" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker2">Фамилия и Имя</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="phone" class="form-control" id="floatingInputWorker3" placeholder="Номер телефона" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker3">Номер телефона</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="gender" id="floatingInputWorker4" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">Мужской</option>
+                                    <option value="1">Женский</option>
+                                </select>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker4">Пол</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select selectworker"  name="role" id="floatingInputWorker5" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="cash">Кассир</option>
+                                    <option value="teacher">Предподавател</option>
+                                </select>
+                                <label for="floatingInputWorker5">Должность</label>
+                            </div>
+                        </div>
+                        <div class="col-6 salary">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="salary" class="form-control" id="floatingInputWorker6" placeholder="Зарплата">
+                                <label for="floatingInputWorker6">Зарплата (сум)</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="telegram" class="form-control" id="floatingInputWorker7" placeholder="Telegram аккаунт" >
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker7">Telegram аккаунт</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating padding">
+                                <select class="form-select" name="status" id="floatingInputWorker16" aria-label="Floating label select example" required="">
+                                    <option selected="" disabled="" value="">Выберите из списка</option>
+                                    <option value="0">Уволен</option>
+                                    <option value="1">Отпуск</option>
+                                    <option value="2">Работает</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingInputWorker16 padding">Статус</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateworker" tabindex="-1" aria-labelledby="updateworker" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменит сотрудник</h5>
+                <button type="button" class="btn-close" onclick="resetWorker()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/workers/save" method="post" name="updateworker" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="login" class="form-control" id="floatingInputWorker8" placeholder="Логин" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker8">Логин</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="password" name="password" class="form-control" id="floatingInputWorker9" placeholder="Пароль">
+                                <label for="floatingInputWorker9">Новый пароль</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="name" class="form-control" id="floatingInputWorker10" placeholder="Фамилия и Имя" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker10">Фамилия и Имя</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="phone" class="form-control" id="floatingInputWorker11" placeholder="Номер телефона" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker11">Номер телефона</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="gender" id="floatingInputWorker12" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">Мужской</option>
+                                    <option value="1">Женский</option>
+                                </select>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputWorker12">Пол</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="role" id="floatingInputWorker13" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="cash">Кассир</option>
+                                    <option value="teacher">Предподавател</option>
+                                </select>
+                                <label for="floatingInputWorker13">Должность</label>
+                            </div>
+                        </div>
+                        <div class="col-6 salaryedit">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="salary" class="form-control" id="floatingInputWorker14" placeholder="Зарплата">
+                                <label for="floatingInputWorker14">Зарплата (сум)</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="telegram" class="form-control" id="floatingInputWorker15" placeholder="Telegram аккаунт">
+                                <label for="floatingInputWorker15">Telegram аккаунт</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating padding">
+                                <select class="form-select" name="status" id="floatingInputWorker17" aria-label="Floating label select example" required="">
+                                    <option selected="" disabled="" value="">Выберите из списка</option>
+                                    <option value="0">Уволен</option>
+                                    <option value="1">Отпуск</option>
+                                    <option value="2">Работает</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingInputWorker17 padding">Статус</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    
+    
+
+    // Edit workers
+    let newFormWorker = document.forms.newworker
+    let upFormWorker = document.forms.updateworker
+    const editWorker = (id) => {
+        fetch(`/workers/edit/${id}`)
+        .then(res => res.json())
+        .then(worker => {
+            upFormWorker._id.value = id 
+            upFormWorker.login.value = worker.user.login
+            upFormWorker.name.value = worker.name
+            upFormWorker.phone.value = worker.phone
+            upFormWorker.gender.value = worker.gender
+            upFormWorker.role.value = worker.user.role
+            upFormWorker.telegram.value = worker.telegram
+            upFormWorker.status.value = worker.status
+            upFormWorker.salary.value = worker.salary
+            
+        }).catch(e=>console.error(e))
+    }
+
+    // Reset Form
+    function resetWorker() {
+        newFormWorker.reset()
+        upFormWorker.reset()
+    }
+
+    
+</script>

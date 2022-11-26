@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center pr-1 mb-2">
+                    <a href="/spending/" 
+                        class="ml-2 btn btn-primary mr-2">
+                            <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h5 class="card-title ml-2 mb-0">Сотрудник: {{worker.name}} {{worker.lname}} </h5>
+                    <h5 class="card-title ms-auto mb-0">Общая оплаченная зарплата: <b>{{summa}} сум</b></h5>
+                    
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Месяц</th>
+                        <th scope="col">Значение оплаты</th>
+                        <th scope="col">Добавлено</th>
+
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each worker.history}}
+                        <tr>
+                            <td>{{date}}</td>
+                            <td>{{getsalary}} сум</td>
+                            <td>{{createdAt}} </td>
+                            <td class="text-right">
+                                <a href="/workers/salary/{{@root.id}}/{{@index}}"
+                                    onclick="return confirm('Вы уверены?')"
+                                    class="ml-2 btn btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

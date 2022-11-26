@@ -1,0 +1,225 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center">
+                    <h5 class="card-title titletitle mb-0 d-flex align-items-center">{{title}}</h5>
+                    <div>
+                        <a href="/report/pupils" class="btn btn-success ml-2">Должники</a>
+                        |
+                        <a href="/report" class="btn btn-success ml-2">все</a>
+                        <a href="/report?type=day" class="btn btn-primary ml-2">Сегодняшний</a>
+                        <a href="/report?type=week" class="btn btn-primary ml-2">Недельная</a>
+                        <a href="/report?type=month" class="btn btn-primary ml-2">За этот месяц</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class=" mb-5">
+
+                    <div class="d-flex align-items-center">
+                        <h5 class="me-2">Выберите дату: <b>{{monthRes}}</b></h5>
+                        <form action="/report" method="get" class="formsearch ml-2 d-flex">
+                            <input type="date" name="from" class="form-control">
+                            <input type="date" name="to" class="form-control">
+                            <button class="btn btn-success ml-2">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <a href="/report/" class="btn btn-info ml-2 me-2">
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+                        <!--                        <button class="btn btn-primary ml-2" onclick="javascript:window.print()">Print</button>-->
+                        <button class="btn btn-primary ml-2" onclick="printElement()">Print</button>
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel </button>
+                        <div class="d-flex ml-a">
+                            <select onchange="filter(event)" class="form-select ml-a">
+                                <option value="all">Barchasi</option>
+                                <option value="oylik">oylik</option>
+                                <option value="kvartallik">kvartallik</option>
+                                <option value="yarim yillik">yarim yillik</option>
+                                <option value="yillik">yillik</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row print">
+                        <div class="col-sm-12 col-12">
+                            <table id="calc_table">
+                                <thead>
+                                <tr class=" widthYuz">
+                                    <th>№</th>
+                                    <th class="fz fift">O'quvchi</th>
+                                    <th class="fz fif">To'lashi lozim</th>
+                                    <th class="text-center fz fif">To'lovi</th>
+                                    <th class="text-center fz fif">To'landi</th>
+                                    <th class="text-right fz fif">Qoldi</th>
+                                    <th class="text-right fz fif">To'lov turi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each pupils}}
+
+                                    <tr class="widthYuz pupils" data-type="{{pricetype}}">
+                                        <td>{{index}}</td>
+                                        <td class="marGin fift"> {{name}} - <b>{{group.numberclass}}-"{{group.typeclass}}"</b></td>
+                                        <td><a href="/pupils/more/{{_id}}"><span class="localnumber">{{price}}</span> so'm</a></td>
+                                        <td class="text-right marGin fif"><span class="localnumber">{{pricemust}}</span> so'm</td>
+                                        <td class="text-right marGin fif"><span class="localnumber">{{summa}}</span> so'm</td>
+                                        <td class="text-right marGin fif"><span class="localnumber">{{must}}</span> so'm</td>
+                                        <td class="text-right marGin fif">{{pricetype}}</td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-12 col-12 marGinAllSum ">
+                            <div>
+                                <b>SUMMA: </b> {{summaPayment}} sum
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-sm-12 col-12 ">
+                            <table>
+                                <thead>
+                                <tr class="gray widthYuz">
+                                    <th class="fz fifty">CHIQIMLAR</th>
+                                    <th class="marGin"></th>
+                                    <th class="marGin"></th>
+                                    <th class="text-right fz fifty">SUMMA</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each spendingother}}
+                                    <tr class="widthYuz">
+                                        <td class="marGin fifty">{{comment}}</td>
+                                        <td class="marGin"></td>
+                                        <td class="marGin"></td>
+                                        <td class="text-right marGin fifty">{{summa}} sum</td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+                            </table>
+                            <div class="col-sm-12 col-12 marGinAllSum">
+                                <div>
+                                    <b>SUMMA: </b> {{summaSpend}} sum
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-12 marGinAllDepSum">
+                                <div>
+                                    <b>Depozitlarsiz umumiy kirim: </b> {{allSumma}} sum
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-12 endprint">
+                                <div>
+                                    Qaydlar
+                                </div>
+                                <div>
+                                    MO
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    table {
+        width: 100%;
+    }
+    tbody .widthYuz:nth-child(odd){
+        background-color: #e7e7e7;
+    }
+    .history {
+        width: 70%;
+    }
+    .inputcash {
+        border: 0;
+        margin-left: 20px;
+    }
+    .inputcash:focus {
+        outline: none;
+    }
+    @media print {
+        .print {
+            font-size: 11px;
+        }
+    }
+    .fz {
+        font-size: 15px;
+    }
+    .logoabco {
+        width: 100px;
+        height: 80px;
+        object-fit: contain;
+    }
+    .title {
+        color: #544747;
+        font-size: 30px;
+    }
+    .marginBottom {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .gray {
+        background-color: #CCCCCC;
+    }
+    .marGinAllSum, .marGinAllDepSum{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .endprint {
+        margin-top: 50px;
+        color: #CCCCCC;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 12px;
+    }
+    /*@media print {*/
+    /*    */
+    /*}*/
+</style>
+
+<script>
+
+    const filter = (e) => {
+        let type = e.target.value
+        let pupils = document.querySelectorAll('tr.pupils')
+        if (type === 'all'){
+            pupils.forEach(pupil => {
+                pupil.style.display = 'table-row'
+            })
+        } else {
+            pupils.forEach(pupil => {
+                if (pupil.getAttribute('data-type') ===type){
+                    pupil.style.display = 'table-row'
+                } else {
+                    pupil.style.display = 'none'
+                }
+            })
+        }
+    }
+    
+        
+    
+    function printElement() {
+        let body = $('body').html(),
+                el = $('.print');
+        $('body').html(el);
+        window.print();
+        $('body').html(body)
+
+    }
+
+</script>

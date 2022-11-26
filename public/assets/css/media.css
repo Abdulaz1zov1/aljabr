@@ -1,0 +1,68 @@
+.inputcash {
+    border: 0;
+    margin-left: 20px;
+}
+.inputcash:focus {
+    outline: none;
+}
+.print {
+    font-size: 11px;
+}
+.fz {
+    font-size: 15px;
+}
+.logoabco {
+    width: 160px;
+    height: 80px;
+}
+.title {
+    color: #544747;
+    font-size: 30px;
+}
+.marginBottom {
+    display: flex;
+    justify-content: space-between;
+}
+.gray {
+    background: #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+}
+.textCenter {
+    text-align: center;
+}
+.marGin {
+    margin-top: 5px;
+}
+.marGinAllSum {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+}
+.marGinAllDepSum {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+}
+.widthYuz {
+    width: 100%;
+    max-width: 100%;
+}
+.fifty {
+    width: 50%;
+}
+.fift {
+    width: 40%;
+}
+.fif {
+    width: 20%;
+}
+.endprint {
+    margin-top: 50px;
+    color: #CCCCCC;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 12px;
+}

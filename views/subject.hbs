@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <input type="text"  class="form-control mr-2" placeholder="Поиск">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newsubject">Добавить</button>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Предмет</th>
+                        <th scope="col">Направление</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each subject}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td>{{title}}</td>
+                            <td>{{course.title}}</td>
+                            <td>
+                                <span class="badge {{class}}">{{status}}</span>
+                            </td>
+                            <td  class="text-right">
+                                <button onclick="editCours('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatecours" class="btn btn-warning ml-2">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <a href="/subject/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                    <i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newsubject" tabindex="-1" aria-labelledby="newsubject" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/subject/" method="post" name="subject" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="title" class="form-control" id="floatingInputCours" placeholder="Название предмета" required>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInputCours">Название предмета</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="course" id="course" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each course}}
+                                <option value="{{_id}}">{{title}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputGroup">Выберите направление</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckCours1">
+                        <label class="form-check-label" for="exampleCheckCours1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatecours" tabindex="-1" aria-labelledby="updatecours" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/subject/save" method="post" name="updatecours" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="title" class="form-control" id="floatingInputCours1" placeholder="Название предмета" required>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInputCours1">Название предмета</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="course" id="course" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each course}}
+                                <option value="{{_id}}">{{title}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputGroup">Выберите направление</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckCours2">
+                        <label class="form-check-label" for="exampleCheckCours2">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    let newFormCourse = document.forms.newcours
+    let upFormCourse = document.forms.updatecours
+    const editCours = (id) => {
+        fetch(`/subject/get/${id}`)
+                .then(res => res.json())
+                .then(subject => {
+                    upFormCourse._id.value = id
+                    upFormCourse.title.value = subject.title
+                    upFormCourse.course.value = subject.course
+                    upFormCourse.status.checked = subject.status == 1 ? true : false
+                }).catch(e=>console.error(e))
+    }
+
+    function resetCourse() {
+        newFormCourse.reset()
+        upFormCourse.reset()
+    }
+
+</script>

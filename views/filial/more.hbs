@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-between">
+  <div class="d-flex">
+    <a href="/filial/" class="mr-2"><i class="fas fa-arrow-left mr-2"></i></a>
+    <h5 class="card-title ml-2">Филиал: {{title}}</h5>
+  </div>
+  <div>
+    <h5 class="card-title">Адрес: {{adress}}</h5>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-xl-4">
+    <div class="card stat-widget">
+      <div class="card-body">
+        <h5 class="card-title">Предподаватели</h5>
+        <h2>{{allTeacherCount}}</h2>
+        <p>Общая количество</p>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-4">
+    <div class="card stat-widget">
+      <div class="card-body">
+        <h5 class="card-title">Ученики</h5>
+        <h2>{{allPupilsCount}}</h2>
+        <p>Общая количество</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-4">
+    <div class="card stat-widget">
+      <div class="card-body">
+        <h5 class="card-title">Группы</h5>
+        <h2>{{allGroupCount}}</h2>
+        <p>Общая количество</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+      <div class="card">
+          <div class="card-body">
+              <h5 class="card-title">Список группы</h5>
+              <table class="table table-hover">
+                <thead>
+              <tr>
+                <th scope="col">Направления</th>
+                <th scope="col">Тип группа</th>
+                <th scope="col">Количества учеников</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+                {{#each group}}
+                <tr>
+                    <td>{{course.title}}</td>
+                    <td>{{typegroup.title}}</td>
+                    <td>{{pupilsCount}}  ученик</td>
+                    <td class="text-right">
+                        <a href="/filial/groupid/{{_id}}" class="btn btn-primary ml-2">
+                        <i class="fas fa-eye"></i></a> 
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+</div>

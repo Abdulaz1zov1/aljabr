@@ -1,0 +1,15 @@
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+        <li {{#if isHome}} class="active-page" {{/if}}>
+            <a href="/"><i data-feather="home"></i>Главная</a>
+        </li>
+        <li {{#if isTest}}class="active-page"{{/if}}>
+            <a href="#"><i data-feather="edit"></i>Тесты<i class="fas fa-chevron-right dropdown-icon"></i></a>
+            <ul class="">
+                <li><a href="/test/create"><i class="fas fa-plus"></i>Добавить тест</a></li>
+                <li><a href="/test/"><i class="far fa-circle"></i>Все тесты</a></li>
+                <li><a href="/test/alltest"><i class="far fa-circle"></i>Тесты</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>

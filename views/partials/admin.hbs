@@ -1,0 +1,65 @@
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+        <li {{#if isHome}}
+            class="active-page"
+            {{/if}}>
+            <a href="/"><i data-feather="home"></i>Главная</a>
+        </li>
+        <li class="sidebar-title">
+            Склад
+        </li>
+        <li {{#if isReport}}class="active-page"{{/if}}>
+            <a href="/report"><i data-feather="message-circle"></i>Отчёт</a>
+        </li>
+        <li {{#if isPayment}}class="active-page"{{/if}}>
+            <a href="/payment/"><i data-feather="dollar-sign"></i>Касса</a>
+        </li>
+        <li {{#if isSpending}}class="active-page"{{/if}}>
+            <a href="/spending/"><i data-feather="archive"></i>Зарплаты</a>
+        </li>
+        <li {{#if isSpendingother}}class="active-page"{{/if}}>
+            <a href="/spendingother/"><i data-feather="activity"></i>Расходы</a>
+        </li>
+        <li class="sidebar-title">
+            Управление
+        </li>
+        <li {{#if isFilial}}class="active-page"{{/if}}>
+            <a href="/filial/"><i data-feather="menu"></i>Филиалы</a>
+        </li>
+        <li {{#if isCourse}}class="active-page"{{/if}}>
+            <a href="/course/"><i data-feather="layers"></i>Направление</a>
+        </li>
+        <li {{#if isSubject}}class="active-page"{{/if}}>
+            <a href="/subject/"><i data-feather="layers"></i>Предметы</a>
+        </li>
+        <li {{#if isWorkers}}class="active-page"{{/if}}>
+            <a href="/workers/"><i data-feather="users"></i>Сотрудники</a>
+        </li>
+        <li {{#if isTypeGroup}}class="active-page"{{/if}}>
+            <a href="/typegroup/"><i data-feather="star"></i>Тип классы</a>
+        </li>
+        <li {{#if isGroup}}class="active-page"{{/if}}>
+            <a href="/group/"><i data-feather="folder"></i>Классы</a>
+        </li>
+        <li {{#if isJournal}}class="active-page"{{/if}}>
+            <a href="/journal/"><i data-feather="folder"></i>Журнал</a>
+        </li>
+        <li {{#if isPupil}}class="active-page"{{/if}}>
+            <a href="/pupils/"><i data-feather="user-plus"></i>Ученики</a>
+        </li>
+        <li class="sidebar-title">
+            Доп.возможности
+        </li>
+        <li {{#if isTest}}class="active-page"{{/if}}>
+            <a href="/test/"><i data-feather="edit"></i>Тесты</a>
+        </li>
+<!--        <li {{#if isTest}}class="active-page"{{/if}}>-->
+<!--            <a href="#"><i data-feather="edit"></i>Тесты<i class="fas fa-chevron-right dropdown-icon"></i></a>-->
+<!--            <ul class="">-->
+<!--                <li><a href="/test/create"><i class="fas fa-plus"></i>Добавить тест</a></li>-->
+<!--                <li><a href="/test/"><i class="far fa-circle"></i>Все тесты</a></li>-->
+<!--                <li><a href="/test/alltest"><i class="far fa-circle"></i>Тесты</a></li>-->
+<!--            </ul>-->
+<!--        </li>-->
+    </ul>
+</div>

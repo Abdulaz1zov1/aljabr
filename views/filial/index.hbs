@@ -1,0 +1,200 @@
+<div class="row">
+  <div class="col">
+      <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-center">
+                <h5 class="card-title">{{title}}</h5>
+                <div class="d-flex align-items-center">
+                    {{!-- <input type="text"  class="form-control mr-2" placeholder="Поиск"> --}}
+                    <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel <i class="fas fa-file ml-2"></i></button>
+                    <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newfilial">Добавить</button>
+                </div>
+                
+            </div> 
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">№</th>
+                  <th scope="col">Область</th>
+                  <th scope="col">Адрес</th>
+                  <th scope="col">Название</th>
+                  <th scope="col">Статус</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each filial}}
+                <tr>
+                  <td>{{index}}</td>
+                  <td>{{province}}</td>
+                  <td>{{adress}}</td>
+                  <td>{{title}}</td>
+                  <td>
+                      <span class="badge {{class}}">{{status}}</span>
+                  </td>
+                  <td class="text-right">
+                      <a href="/filial/more/{{_id}}" class="btn btn-primary ml-2">
+                      <i class="fas fa-eye"></i></a> 
+
+                      <button onclick="editFilial('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatefilial" class="btn btn-warning ml-2">
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <a href="/filial/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                      <i class="fas fa-trash"></i></a>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+              <table id="calc_table" style="display: none">
+                  <thead>
+                  <tr>
+                      <th>№</th>
+                      <th>Область</th>
+                      <th>Адрес</th>
+                      <th>Название</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {{#each filial}}
+                      <tr>
+                          <td>{{index}}</td>
+                          <td>{{province}}</td>
+                          <td>{{adress}}</td>
+                          <td>{{title}}</td>
+                      </tr>
+                  {{/each}}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="modal fade" id="newfilial" tabindex="-1" aria-labelledby="newfilial" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить филиал</h5>
+                <button type="button" class="btn-close" onclick="resetfilial()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/filial/" method="post" name="filial" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                      <select name="province" id="province" class="form-control" id="floatingInputFilial" required>
+                        <option selected disabled value="">Выберите из списка</option>
+                        <option value="Андижанская область">Андижанская область</option>
+                        <option value="Бухарская область">Бухарская область</option>
+                        <option value="Джизакская область">Джизакская область</option>
+                        <option value="Кашкадарьинская область">Кашкадарьинская область</option>
+                        <option value="Навоийская область">Навоийская область</option>
+                        <option value="Наманганская область">Наманганская область</option>
+                        <option value="Самаркандская область">Самаркандская область</option>
+                        <option value="Сурхандарьинская область">Сурхандарьинская область</option>
+                        <option value="Сырдарьинская область">Сырдарьинская область</option>
+                        <option value="Ташкентская область">Ташкентская область</option>
+                        <option value="Ферганская область">Ферганская область</option>
+                        <option value="Республика Каракалпакстан">Республика Каракалпакстан</option>
+                        <option value="Хорезмская область">Хорезмская область</option>
+                        <option value="Город Ташкент">Город Ташкент</option>
+                      </select>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial">Выберите регион</label>
+                    </div> 
+                    <div class="mb-3 form-floating">
+                      <input type="text" name="adress" class="form-control" id="floatingInputFilial1" placeholder="" required>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial1">Адрес</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                      <input type="text" name="title" class="form-control" id="floatingInputFilial2" placeholder="" required>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial2">Название филиал</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                      <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckFilial1">
+                      <label class="form-check-label" for="exampleCheckFilial1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatefilial" tabindex="-1" aria-labelledby="updatefilial" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить филиал</h5>
+                <button type="button" class="btn-close" onclick="resetfilial()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/filial/save" method="post" name="updatefilial" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                      <select name="province" id="province1" class="form-control" id="floatingInputFilial3" required>
+                        <option selected disabled value="">Выберите из списка</option>
+                        <option value="Андижанская область">Андижанская область</option>
+                        <option value="Бухарская область">Бухарская область</option>
+                        <option value="Джизакская область">Джизакская область</option>
+                        <option value="Кашкадарьинская область">Кашкадарьинская область</option>
+                        <option value="Навоийская область">Навоийская область</option>
+                        <option value="Наманганская область">Наманганская область</option>
+                        <option value="Самаркандская область">Самаркандская область</option>
+                        <option value="Сурхандарьинская область">Сурхандарьинская область</option>
+                        <option value="Сырдарьинская область">Сырдарьинская область</option>
+                        <option value="Ташкентская область">Ташкентская область</option>
+                        <option value="Ферганская область">Ферганская область</option>
+                        <option value="Республика Каракалпакстан">Республика Каракалпакстан</option>
+                        <option value="Хорезмская область">Хорезмская область</option>
+                        <option value="Город Ташкент">Город Ташкент</option>
+                      </select>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial3">Выберите регион</label>
+                    </div> 
+                    <div class="mb-3 form-floating">
+                      <input type="text" name="adress" class="form-control" id="floatingInputFilial4" placeholder="" required>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial4">Адрес</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                      <input type="text" name="title" class="form-control" id="floatingInputFilial5" placeholder="" required>
+                      <div class="invalid-feedback">Заполните поля</div>
+                      <label for="floatingInputFilial5">Название филиал</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                      <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckFilial2">
+                      <label class="form-check-label" for="exampleCheckFilial2">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let newFormFilial = document.forms.filial
+    let upFormFilial = document.forms.updatefilial
+    const editFilial = (id) => {
+        fetch(`/filial/edit/${id}`)
+        .then(res => res.json())
+        .then(filial => {
+            upFormFilial._id.value = id 
+            upFormFilial.province.value = filial.province
+            upFormFilial.adress.value = filial.adress
+            upFormFilial.title.value = filial.title
+            upFormFilial.status.checked = filial.status == 1 ? true : false
+        }).catch(e=>console.error(e))
+    }
+
+    function resetfilial() {
+      newFormFilial.reset()
+      upFormFilial.reset()
+    }
+
+</script>

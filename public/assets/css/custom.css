@@ -1,0 +1,79 @@
+/* Write your custom CSS here */
+
+
+.toast {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    overflow: hidden;
+    z-index: 3;
+
+}
+.badge.status-0{
+    background-color: #ee6e83!important;
+    color: #fff;
+}
+.badge.status-0,
+.badge.status-1{
+    display: inline-block;
+    
+}
+.badge.status-1{
+    background-color: #6bcac2!important;
+    color: #fff;
+}
+.badge.status-1:before {
+    content: 'Активный';
+    
+}
+.badge.status-0:before {
+    content: 'Скрыто';
+}
+.text-right {
+    text-align: right;
+}
+.ml-2 {
+    margin-left: 1rem;
+}
+.ml-a {
+    margin-left: auto;
+}
+
+table thead tr{
+    position: sticky;
+    top: 100px;
+    background-color: #f8f9fa;
+}
+table thead tr.pos{
+    position: relative;
+    top: 0;
+}
+table.journal thead th.little,
+table.journal tbody td{
+    padding: 15px!important;
+}
+.others a{
+    /*color: #000;*/
+}
+/*.noprint{*/
+/*    display: none!important;*/
+/*}*/
+.showprint{
+    display: none;
+}
+@media print {
+    .showprint{
+        display: block;
+    }
+    .noprint{
+        display: none!important;
+    }
+    .card-body {
+        padding: 0;
+    }
+    .page-container,
+    .page-content {
+        padding-top: 0;
+        margin-top: 0;
+    }
+}

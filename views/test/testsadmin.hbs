@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-center mb-4">
+                    <a href="/test/"  class="ml-2 btn btn-primary">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h5 class="card-title mb-0 ml-2">{{title}}</h5>
+                </div>
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 27px;" aria-sort="ascending">№</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 332px;">Вопрос</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Направление</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 188px;">Правилный ответ</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 300px;">Все ответы</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 88px;">Дата</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 188px;">Предподавател</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each test}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{question}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{correctanswer}}</td>
+                                        <td>{{answers}}</td>
+                                        <td>{{data}}</td>
+                                        <td>{{createdwho.name}}</td>
+
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+        <li {{#if isHome}}
+            class="active-page"
+            {{/if}}>
+            <a href="/"><i data-feather="home"></i>Главная</a>
+        </li>
+        <li class="sidebar-title">
+            Склад
+        </li>
+        <li>
+            <a href="#"><i data-feather="message-circle"></i>Отчёт</a>
+        </li>
+        <li {{#if isPayment}}class="active-page"{{/if}}>
+            <a href="/payment/"><i data-feather="dollar-sign"></i>Касса</a>
+        </li>
+        <li {{#if isSpending}}class="active-page"{{/if}}>
+            <a href="/spending/"><i data-feather="archive"></i>Зарплаты</a>
+        </li>
+        <li {{#if isSpendingother}}class="active-page"{{/if}}>
+            <a href="/spendingother/"><i data-feather="activity"></i>Расходы</a>
+        </li>
+    </ul>
+</div>

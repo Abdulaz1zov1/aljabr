@@ -1,0 +1,207 @@
+<div class="row">
+    <div class="col">
+        <div class="card noprint">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center">
+                    <h5 class="card-title titletitle mb-0 d-flex align-items-center">{{title}}</h5>
+                    <div>
+                        <a href="/report/pupils" class="btn btn-success ml-2">Должники</a>
+                        |
+                        <a href="/report" class="btn btn-success ml-2">все</a>
+                        <a href="/report?type=day" class="btn btn-primary ml-2">Сегодняшний</a>
+                        <a href="/report?type=week" class="btn btn-primary ml-2">Недельная</a>
+                        <a href="/report?type=month" class="btn btn-primary ml-2">За этот месяц</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <h5 class="card-title titletitle showprint justify-content-center align-items-center">{{title}}</h5>
+        <div class="card">
+            <div class="card-body">
+                <div class="noprint d-flex justify-content-between align-center mb-5">
+
+                    <div class="d-flex align-items-center">
+                        <h5 class="me-2">Выберите дату: <b>{{monthRes}}</b></h5>
+                        <form action="/report" method="get" class="formsearch ml-2 d-flex">
+                            <input type="date" name="from" class="form-control">
+                            <input type="date" name="to" class="form-control">
+                            <button class="btn btn-success ml-2">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <a href="/report/" class="btn btn-info ml-2 me-2">
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+<!--                        <button class="btn btn-primary ml-2" onclick="javascript:window.print()">Print</button>-->
+                        <button class="btn btn-primary ml-2" onclick="printElement()">Print</button>
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel </button>
+                    </div>
+                </div>
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row print">
+                        <div class="col-sm-12 col-12">
+                            <table id="calc_table">
+                                <thead>
+<!--                                    <tr>-->
+<!--                                        <td></td>-->
+<!--                                        <td></td>-->
+<!--                                        <td></td>-->
+<!--                                        <td class="ext-right fz"><b>Kassir:</b><input class="inputcash" type="text"></td>-->
+<!--                                    </tr>-->
+                                    <tr class="widthYuz">
+                                        <th class="text-center" colspan="3">{{title}}</th>
+                                    </tr>
+                                    <tr class=" widthYuz">
+                                        <td>№</td>
+                                        <th>O'quvchi</th>
+                                        <td class="history">
+                                            <table>
+                                                <th class="fz fif">TO'LOV TURI</th>
+                                                <th class="text-center fz fif">SANA</th>
+                                                <th class="text-right fz fif">SUMMA</th>
+                                            </table>
+                                        </td>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {{#each payment}}
+
+                                    <tr class="widthYuz">
+                                        <td>{{index}}</td>
+                                        <td class="marGin fift"> {{pupil.name}} - <b>{{group.numberclass}}-"{{group.typeclass}}"</b></td>
+
+                                        <td class="history">
+                                            <table>
+                                                {{#each historysumma}}
+                                                    <tr>
+                                                        <td class="textCenter marGin fif">{{typepayment}}</td>
+                                                        <td class="text-right marGin fif">{{data}}</td>
+                                                        <td class="text-right marGin fif" width="150">{{summa}} sum</td>
+                                                    </tr>
+                                                {{/each}}
+                                            </table>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="4"><b>SUMMA: </b> {{summaPayment}} sum</td>
+                                </tr>
+                                <tr class="gray widthYuz">
+                                    <th class="fz fifty">CHIQIMLAR</th>
+                                    <th class="marGin"></th>
+                                    <th class="text-right fz fifty">SUMMA</th>
+                                </tr>
+                                {{#each spendingother}}
+                                    <tr class="widthYuz">
+                                        <td class="marGin fifty">{{comment}}</td>
+                                        <td class="marGin"></td>
+                                        <td class="text-right marGin fifty">{{summa}} sum</td>
+                                    </tr>
+                                {{/each}}
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>SUMMA: </b> {{summaSpend}} sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Depozitlarsiz umumiy kirim: </b> {{allSumma}} sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Наличка: </b> <span class="localnumber">{{nalichka}}</span> sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Остатка наличка: </b> <span class="localnumber">{{havenalichka}}</span> sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Payme: </b> <span class="localnumber">{{payme}}</span> sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Click: </b> <span class="localnumber">{{clicksumma}}</span> sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Перечисление: </b> <span class="localnumber">{{perechisleniya}}</span> sum</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right marGin fif" colspan="3"><b>Терминал: </b> <span class="localnumber">{{terminal}}</span> sum</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    table {
+        width: 100%;
+    }
+    tbody .widthYuz:nth-child(odd){
+        background-color: #e7e7e7;
+    }
+    .history {
+        width: 70%;
+    }
+    .inputcash {
+        border: 0;
+        margin-left: 20px;
+    }
+    .inputcash:focus {
+        outline: none;
+    }
+    @media print {
+        .print {
+            font-size: 11px;
+        }
+    }
+    .fz {
+        font-size: 15px;
+    }
+    .logoabco {
+        width: 100px;
+        height: 80px;
+        object-fit: contain;
+    }
+    .title {
+        color: #544747;
+        font-size: 30px;
+    }
+    .marginBottom {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .gray {
+        background-color: #CCCCCC;
+    }
+    .marGinAllSum, .marGinAllDepSum{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .endprint {
+        margin-top: 50px;
+        color: #CCCCCC;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 12px;
+    }
+    /*@media print {*/
+    /*    */
+    /*}*/
+</style>
+
+<script>
+    function printElement() {
+
+        window.print();
+
+    }
+
+</script>

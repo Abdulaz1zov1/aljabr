@@ -1,0 +1,28 @@
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+        <li {{#if isHome}}
+            class="active-page"
+            {{/if}}>
+            <a href="/"><i data-feather="home"></i>Главная</a>
+        </li>
+        <li class="sidebar-title">
+            Склад
+        </li>
+        <li {{#if isSpendingother}}class="active-page"{{/if}}>
+            <a href="/spendingother/"><i data-feather="activity"></i>Расходы</a>
+        </li>
+        <li class="sidebar-title">
+            Управление
+        </li>
+        <li {{#if isGroup}}class="active-page"{{/if}}>
+            <a href="/group/"><i data-feather="folder"></i>Классы</a>
+        </li>
+        
+        <li class="sidebar-title">
+            Доп.возможности
+        </li>
+        <li {{#if isTest}}class="active-page"{{/if}}>
+            <a href="/test/"><i data-feather="edit"></i>Тесты</a>
+        </li>
+    </ul>
+</div>

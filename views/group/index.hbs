@@ -1,0 +1,322 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-5">
+                    <h5 class="card-title mb-0">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ExportToExcel('xls')">Export to Excell <i class="fas fa-file ml-2"></i></button>
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newgroup">Добавить</button>
+                    </div>
+                </div> 
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display calc_table dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 25px;" aria-sort="ascending">№</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Адрес филиала</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 100px;">Направление</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 100px;">Тип класса</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 140px;">Предподаватель класса</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Номер класса</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Количества учеников</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Статус</th>
+                                        <th ></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each group}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{filial.title}}. {{filial.adress}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{typegroup.title}}</td>
+                                        <td>{{teacher.name}}</td>
+                                        <td>{{numberclass}}-"{{typeclass}}"</td>
+                                        <td><a href="/group/full/{{_id}}">{{students}}  ученик</a></td>
+                                        <td>
+                                            {{{status}}}
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick="editGroup('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updategroup" class="btn btn-warning ml-2">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <a href="/group/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                            <i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                
+                            </table>
+
+
+
+                            <table id="calc_table"  style="display: none">
+                                <thead>
+                                <tr role="row">
+                                    <th align="center" colspan="7">Список группы</th>
+
+                                </tr>
+                                <tr role="row">
+                                    <th>№</th>
+                                    <th>Адрес филиала</th>
+                                    <th>Направление</th>
+                                    <th>Номер класса</th>
+                                    <th>Предподаватель класса</th>
+                                    <th>Количества учеников</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each group}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{filial.title}}. {{filial.adress}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{numberclass}}-"{{typeclass}}"</td>
+                                        <td>{{teacher.name}}</td>
+                                        <td><a href="/group/full/{{_id}}">{{students}}  ученик</a></td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newgroup" tabindex="-1" aria-labelledby="newgroup" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить класс</h5>
+                <button type="button" class="btn-close" onclick="resetGroup()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/group/" method="post" name="newgroup" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="filial" id="filial" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each filial}}
+                                        <option value="{{_id}}">{{title}}. {{adress}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup">Выберите адрес</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="course" id="course" class="form-control" id="floatingInputGroup1" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each course}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup1">Выберите направление</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="typegroup" id="typegroup" class="form-control" id="floatingInputGroup2" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each typegroup}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup2">Выберите тип группа</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="teacher" id="teacher" class="form-control" id="floatingInputGroup3" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each users}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup3">Выберите предподаватель</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="numberclass" class="form-control" id="floatingInputGroup4" placeholder="" required>
+                                <label for="floatingInputGroup4">Номер класса №</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="typeclass" class="form-control" id="floatingInputGroup5" placeholder="" required>
+                                <label for="floatingInputGroup5">Какая класса </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="maxpupils" class="form-control" id="floatingInputGroup6" placeholder="" required>
+                                <label for="floatingInputGroup6">Количество учеников</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" id="exampleCheckGroup1" checked>
+                        <label class="form-check-label" for="exampleCheckGroup1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updategroup" tabindex="-1" aria-labelledby="updategroup" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить класс</h5>
+                <button type="button" class="btn-close" onclick="resetGroup()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/group/save" method="post" name="updategroup" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="filial" id="filialedit" class="form-control" id="floatingInputGroup8" data-index='0'  required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each filial}}
+                                        <option value="{{_id}}">{{title}}. {{adress}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup8">Выберите адрес</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="course" id="courseedit" class="form-control" id="floatingInputGroup9" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each course}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup9">Выберите направление</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="typegroup" id="typegroupedit" class="form-control" id="floatingInputGroup10" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each typegroup}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup10">Выберите тип группа</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="teacher" id="teacheredit" class="form-control" id="floatingInputGroup11" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each users}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputGroup11">Выберите предподаватель</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="numberclass" class="form-control" id="floatingInputGroup12" placeholder="" required>
+                                <label for="floatingInputGroup12">Номер класса №</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="typeclass" class="form-control" id="floatingInputGroup13" placeholder="" required>
+                                <label for="floatingInputGroup13">Какая класса </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="maxpupils" class="form-control" id="floatingInputGroup14" placeholder="" >
+                                <label for="floatingInputGroup14">Количество учеников</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" id="exampleCheckGroup2" checked>
+                        <label class="form-check-label" for="exampleCheckGroup2">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<style>
+    table.dataTable td, table.dataTable th {
+        padding: 15px 15px ! important;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var ExportToExcel = (function () {
+        // Define your style class template.
+        var style = "<style> th, td { border: 1px solid #000000; }, td:last-child{display: none}</style>";
+        var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' + style + '</head><body><table>{table}</table></body></html>'
+                , base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        }
+                , format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+        }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById('calc_table')
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+<script>
+    let newFormGroup = document.forms.newgroup
+    let upFormGroup = document.forms.updategroup
+    const editGroup = (id) => {
+        fetch(`/group/edit/${id}`)
+        .then(res => res.json())
+        .then(group => {
+            upFormGroup._id.value = id 
+            upFormGroup.filial.value = group.filial
+            upFormGroup.course.value = group.course
+            upFormGroup.typegroup.value = group.typegroup
+            upFormGroup.teacher.value = group.teacher
+            upFormGroup.numberclass.value = group.numberclass
+            upFormGroup.typeclass.value = group.typeclass
+            upFormGroup.maxpupils.value = group.maxpupils
+            upFormGroup.status.checked = group.status == 1 ? true : false
+        }).catch(e=>console.error(e))
+    }
+
+    function resetGroup() {
+        newFormGroup.reset()
+        upFormGroup.reset()
+    }
+
+</script>
+
+
+
+
+

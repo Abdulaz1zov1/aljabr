@@ -1,0 +1,358 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-5">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <h5 class="me-2">Текуший месяц: <b>{{monthRes}}</b></h5>
+                        <form action="/payment" method="get" class="formsearch ml-2">
+                            <div class="d-flex justify-content-end">
+                                 <select name="month" class="form-select filtr month me-2" id="month1">
+                                    <option selected="" disabled="" value="">Выберите месяц</option>
+                                    <option value="0">Январ</option>
+                                    <option value="1">Феврал</option>
+                                    <option value="2">Март</option>
+                                    <option value="3">Aпрел</option>
+                                    <option value="4">Май</option>
+                                    <option value="5">Июн</option>
+                                    <option value="6">Июл</option>
+                                    <option value="7">Aвгуст</option>
+                                    <option value="8">Сентабр</option>
+                                    <option value="9">Октабр</option>
+                                    <option value="10">Ноябр</option>
+                                    <option value="11">Декабр</option>
+                                </select>
+                                <select name="filtersumma" class="form-select me-2" id="">
+                                    <option selected="" disabled="" value="">Выберите категории</option>
+                                        <option value="0.25">Четверть</option>
+                                        <option value="0.5">Половина</option>
+                                        <option value="1">Полный</option>
+                                </select>
+                                <button class="btn btn-primary ml-2 me-3" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            
+                        </form>
+                        <a href="/payment/" class="btn btn-info ml-1 me-2">
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newpayment">Добавить</button>
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ToExcel('xls')">Excel <i class="fas fa-file ml-2"></i></button>
+                    </div>
+                </div> 
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf"  class="display dataTable protable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 17px;" aria-sort="ascending">№</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 230px;">Имя и фамилия</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 170px;">Номер телефона</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 100px;">Класс</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Обшая сумма</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Сумма оплаты</th>
+                                        <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 120px;">Сумма остатки (долг)</th>
+                                        <th ></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each payment}}
+
+                                            <tr role="row" class="odd">
+                                                <td class="sorting_1">{{index}}</td>
+                                                <td>{{pupil.name}}</td>
+                                                <td>{{pupil.phone}}</td>
+                                                <td>{{group.numberclass}}-"{{group.typeclass}}"</td>
+                                                <td><span class="localnumber">{{pupil.price}}</span> сум</td>
+                                                <td class="summagreen"><span class="localnumber">{{allsumma}}</span> сум</td>
+                                                <td class="summared"><span class="localnumber">{{summaEnd}}</span> сум</td>
+
+                                                <td class="text-right">
+                                                    <a href="/payment/pay/{{_id}}"
+                                                        class="ml-2 btn btn-primary">
+                                                            Оплаты
+                                                    </a>
+        <!--                                            <button onclick="editPayment('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatepayment" class="btn btn-warning ml-2">-->
+        <!--                                                <i class="fas fa-pen"></i>-->
+        <!--                                            </button>-->
+        <!--                                            <a href="/payment/delete/{{_id}}"-->
+        <!--                                                onclick="return confirm('Вы уверены?')"-->
+        <!--                                                class="ml-2 btn btn-danger">-->
+        <!--                                                    <i class="fas fa-trash"></i>-->
+        <!--                                            </a>-->
+                                                </td>
+                                            </tr>
+                                        
+                                    {{/each}}
+
+                                </tbody>
+                            </table>
+                            <table id="calc_table" style="display: none">
+                                <thead>
+                                <tr role="row">
+                                    <th>№</th>
+                                    <th>Имя и фамилия</th>
+                                    <th>Номер телефона</th>
+                                    <th>Класс</th>
+                                    <th>Обшая сумма</th>
+                                    <th>Сумма оплаты</th>
+                                    <th>Сумма остатки (долг)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each payment}}
+
+                                    <tr>
+                                        <td >{{index}}</td>
+                                        <td>{{pupil.name}}</td>
+                                        <td>{{pupil.phone}}</td>
+                                        <td>{{group.numberclass}}-"{{group.typeclass}}"</td>
+                                        <td><span class="localnumber">{{pupil.price}}</span> сум</td>
+                                        <td><span class="localnumber">{{allsumma}}</span> сум</td>
+                                        <td><span class="localnumber">{{summaEnd}}</span> сум</td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newpayment" tabindex="-1" aria-labelledby="newpayment" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить оплаты</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/payment/" method="post" name="newpayment" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <input type="date" name="data" class="form-control" id="floatingInputPayment4" placeholder="Дата принятие оплаты" >
+                        <label for="floatingInputPayment4">Дата принятие оплаты</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="filial" class="form-control filial" id="floatingInputPayment1" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each filial}}
+                                <option value="{{_id}}">{{province}} | {{adress}} | {{title}} </option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment1">Выберите адрес</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="group" class="form-control group" id="floatingInputPayment2" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each group}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment2">Выберите класс</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="pupil" class="form-control pupil" id="floatingInputPayment3" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each pupils}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment3">Выберите ученик</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <div class="spend">
+
+                        </div>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="summa" class="form-control" id="floatingInputPayment4" placeholder="" required>
+                        <label for="floatingInputPayment4">Сумма</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="typepayment" class="form-control pupil" id="floatingInputPayment5" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            <option value="Click">Click</option>
+                            <option value="Payme">Payme</option>
+                            <option value="Наличие">Наличие</option>
+                            <option value="Перечисление">Перечисление</option>
+                            <option value="Терминал">Терминал</option>
+                        </select>
+                        <label for="floatingInputPayment5">Тип оплаты  Например: Click, Payme, Наличие</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="comment" class="form-control" id="floatingInputPayment4" placeholder="" >
+                        <label for="floatingInputPayment4">Описание(необязательно)</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatepayment" tabindex="-1" aria-labelledby="updatepayment" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Редактировать оплаты</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/payment/save" method="post" name="updatepayment" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="date" name="data" class="form-control" id="floatingInputPayment4" placeholder="Дата принятие оплаты" >
+                        <label for="floatingInputPayment4">Дата принятие оплаты</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="filial" class="form-control" id="floatingInputPayment5" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each filial}}
+                                <option value="{{_id}}">{{province}} | {{adress}} | {{title}} </option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment5">Выберите адрес</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="group" class="form-control" id="floatingInputPayment6" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each group}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment6">Выберите класс</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="pupil" class="form-control pupil" id="floatingInputPayment7" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each pupils}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputPayment7">Выберите ученик</label>
+                    </div>
+                    
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="summa" class="form-control" id="floatingInputPayment8" placeholder="" required>
+                        <label for="floatingInputPayment8">Сумма</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .summared {
+        color: red;
+    }
+    .summagreen {
+        color: green;
+    }
+    .formsearch {
+        width: 600px;
+    }
+    .spend {
+        display: none;
+    }
+</style>
+<script>
+
+    // Select add 
+
+    let filial = document.querySelector('.filial')
+    let group = document.querySelector('.group')
+    let pupil = document.querySelector('.pupil')
+    let spend = document.querySelector('.spend')
+    
+    filial.addEventListener('change', () => {
+        
+        group.innerHTML = '<option selected disabled value="">Выберите из списка</option>'
+        fetch(`/payment/filial/${filial.value}`)
+        .then(res => res.json())
+        .then(groups => {
+            groups.forEach(gr => {
+                group.innerHTML += `
+                    <option value="${gr._id}">${gr.numberclass}-"${gr.typeclass}"</option>
+                `
+            })
+            
+            
+        }).catch(e=>console.error(e))
+    })
+    
+    group.addEventListener('change', () => {
+
+        
+        fetch(`/payment/group/${group.value}`)
+        .then(res => res.json())
+        .then(pupils => {
+            
+            pupil.innerHTML = '<option selected disabled value="">Выберите из списка</option>'
+            pupils = pupils.map(pup => {
+                pupil.innerHTML += `
+                    <option value="${pup._id}">${pup.name}</option>
+                `
+                return pup
+            })
+            
+        }).catch(e=>console.error(e))
+    })
+
+
+
+    pupil.addEventListener('change', () => {
+
+        fetch(`/payment/pupil/${pupil.value}`)
+                .then(res => res.json())
+                .then(pupil => {
+                    spend.style.display = "block";
+                    if (pupil.price) {
+                        pupil.price = pupil.price.toLocaleString()
+                        spend.innerHTML = "Сумма должен: " + pupil.price + " сум"
+                    } else {
+                        spend.innerHTML = "Ничего не найдено"
+                    }
+
+                }).catch(e=>console.error(e))
+    })
+
+
+    let newFormPayment = document.forms.newpayment
+    let upFormPayment = document.forms.updatepayment
+    
+    const editPayment = (id) => {
+        fetch(`/payment/edit/${id}`)
+        .then(res => res.json())
+        .then(payment => {
+            upFormPayment._id.value = id 
+            upFormPayment.filial.value = payment.filial
+            upFormPayment.data.value = payment.data
+            upFormPayment.pupil.value = payment.pupil
+            upFormPayment.summa.value = payment.summa
+            upFormPayment.group.value = payment.group
+            
+        }).catch(e=>console.error(e))
+    }
+
+    function resetWorker() {
+        newFormPayment.reset()
+        upFormPayment.reset()
+    }
+
+
+
+
+    
+</script>

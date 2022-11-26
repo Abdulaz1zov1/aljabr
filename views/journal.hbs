@@ -1,0 +1,197 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <input type="text"  class="form-control mr-2" placeholder="Поиск">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newjournal">Добавить</button>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Группа</th>
+                        <th scope="col">Учитель</th>
+                        <th scope="col">Предмет</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each journal}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td>{{group.numberclass}}-{{group.typeclass}}</td>
+                            <td>{{teacher.name}}</td>
+                            <td>{{subject.title}}</td>
+                            <td  class="text-right">
+                                <a href="/journal/more/{{_id}}" class="ml-2 btn btn-primary">
+                                    <i class="fas fa-eye"></i></a>
+                                <button class="ml-2 btn btn-warning" data-bs-toggle="modal" data-bs-target="#updatecours" onclick="editCours('{{_id}}')">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <a href="/journal/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                    <i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newjournal" tabindex="-1" aria-labelledby="newjournal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/journal/" method="post" name="journal" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <select name="group" id="group" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each group}}
+                                <option value="{{_id}}">{{numberclass}}-{{typeclass}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="group">Выберите класс</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="subject" id="subject" class="form-control"  data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each subject}}
+                                <option value="{{_id}}">{{title}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="subject">Выберите предмет</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="teacher" id="teacher" class="form-control"  data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each teachers}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="teacher">Выберите учителя</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="date" name="fquarter" class="form-control" id="fquarter" placeholder="Дата первый четверти" >
+                        <label for="fquarter">Дата первый четверти</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="average" value="1" class="form-check-input"  id="average">
+                        <label class="form-check-label" for="average">Расчёт общих балл</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked  id="status">
+                        <label class="form-check-label" for="status">Активный</label>
+                    </div>
+                    <div class="text-danger" id="addexist" style="display: none">Такой журнал уже есть!</div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatecours" tabindex="-1" aria-labelledby="updatecours" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/journal/save" method="post" name="updatecours" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <select name="group" id="upgroup" class="form-control"  data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each group}}
+                                <option value="{{_id}}">{{numberclass}}-{{typeclass}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="upgroup">Выберите класс</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="subject" id="upsubject" class="form-control"  data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each subject}}
+                                <option value="{{_id}}">{{title}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="upsubject">Выберите предмет</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="teacher" id="upteacher" class="form-control"  data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each teachers}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="upteacher">Выберите учителя</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="date" name="fquarter" class="form-control" id="upfquarter" placeholder="Дата первый четверти" >
+                        <label for="upfquarter">Дата первый четверти</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="average" value="1" class="form-check-input"  id="upaverage">
+                        <label class="form-check-label" for="upaverage">Расчёт общих балл</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="upstatus">
+                        <label class="form-check-label" for="upstatus">Активный</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    let newFormCourse = document.forms.newcours
+    let upFormCourse = document.forms.updatecours
+    const editCours = (id) => {
+        fetch(`/journal/get/${id}`)
+                .then(res => res.json())
+                .then(journal => {
+                    let date = new Date()
+                    if (journal.fquarter){
+                        date = new Date(journal.fquarter)
+                    }
+                    upFormCourse.fquarter.value = date.toISOString().substring(0,10)
+                    upFormCourse._id.value = id
+                    upFormCourse.group.value = journal.group
+                    upFormCourse.teacher.value = journal.teacher
+                    upFormCourse.subject.value = journal.subject
+
+                    upFormCourse.status.checked = journal.status == 1 ? true : false
+                    upFormCourse.average.checked = journal.average == 1 ? true : false
+                }).catch(e=>console.error(e))
+    }
+
+    const checkJournal = (group,subject) =>{
+        fetch(`/journal/check/${group}/${subject}`)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    return res
+                })
+    }
+
+    function resetCourse() {
+        newFormCourse.reset()
+        upFormCourse.reset()
+    }
+
+</script>

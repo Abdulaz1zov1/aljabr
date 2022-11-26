@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex  align-center justify-content-between">
+                    <div class="d-flex align-center ">
+                        <a href="#" onclick="window.history.back()">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h5 class="card-title ml-2">{{pupil.name}}. <b>{{group.numberclass}}-{{group.typeclass}}</b></h5>
+                    </div>
+                    <h5 class="card-title ml-2">
+                        Общая оплата: <span class="localnumber">{{pupil.price}}</span> сум</h5>
+                    <h5 class="card-title ml-2">
+                        {{pupil.pricetype}} оплата: <span class="localnumber">{{pupil.mustprice}}</span> сум</h5>
+                    <h5 class="card-title ml-2">
+                        Должен оплатить: <span class="localnumber">{{pupil.mprice}}</span> сум</h5>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Тип оплаты</th>
+                        <th scope="col">Примечение</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each payments}}
+                        {{#each historysumma}}
+                            <tr>
+                                <td>{{index}}</td>
+                                <td><span class="localnumber">{{summa}}</span> сум</td>
+                                <td>{{data}}</td>
+                                <td>{{typepayment}}</td>
+                                <td>{{comment}}</td>
+                                <td class="text-right">
+                                    <a href="/payment/paydelete/{{../this._id}}/{{@index}}"
+                                       onclick="return confirm('Вы уверены?')"
+                                       class="ml-2 btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+
+                    {{/each}}
+                    </tbody>
+                    <tfoot>
+
+                        <tr>
+                            <th>Оплчено</th>
+                            <th colspan="3"><b class="localnumber">{{pupil.allpay}}</b> сум</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

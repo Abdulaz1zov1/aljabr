@@ -1,0 +1,318 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                    <a href="/group/" class="ml-2 btn btn-info">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <p class="card-title ml-2 titletitle">{{title}} {{group.numberclass}}-"{{group.typeclass}}" класса</p>
+                    </div>
+                    <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ExportToExcel('xls')">Export to Excell <i class="fas fa-file ml-2"></i></button>
+                </div>
+                <div>
+                    {{#if startdata}}
+                    <h5 class="ml-2">Guruhga start berilgan sana: {{startdata}}</h5>
+                    {{else}}
+                    <div class="d-flex justify-content-between">
+                        <div></div>
+                        <div>
+                            <form action="/group/data" method="post" class="needs-validation" novalidate>
+                                <input type="hidden" name="_csrf" value="{{csrf}}">
+                                <input type="hidden" name="_id" value="{{group._id}}">
+                                <div class="d-flex formdata">
+                                    <div class="form-floating">
+                                        <input type="date" name="start" class="form-control forminp" id="floatingInput" placeholder="" required>
+                                        <label for="floatingInput">Когда начинает?</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary formbtn">Старт</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    
+                    {{/if}}
+                </div>
+                
+                <table id="zero-conf" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Имя и Фамилия</th>
+                            <th scope="col">Пол</th>
+                            <th scope="col">Номер телефона</th>
+                            <th scope="col">Адрес</th>
+                            <th scope="col">Оплата за договору</th>
+                            <th scope="col">Оплачено</th>
+                            <th scope="col">Остатка</th>
+                            <th scope="col">Тип оплаты</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each group.pupils}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td> {{name}}</td>
+                            <td>{{{gender}}}</td>
+                            <td>{{phone}}</td>
+                            <td>{{address}}</td>
+                            <td><a href="/pupils/more/{{_id}}"><span class="localnumber">{{price}}</span> сум</a></td>
+                            <td><span class="localnumber">{{summa}}</span> сум</td>
+                            <td style="display: none">
+                                {{#each payments}}
+                                    {{#each historysumma}}
+                                        {{summa}}
+                                    {{/each}}
+                                {{/each}}
+                            </td>
+                            <td>{{must}} сум</td>
+                            <td>{{pricetype}}</td>
+                            <td class="text-right">
+                                <button onclick="editPupil('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatepupil" class="btn btn-warning ml-2">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <a href="/group/full/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                <i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th >
+                            <span class="localnumber">{{allPrice}}</span> сум
+                        </th>
+                        <th>
+                            <span class="localnumber">{{allSumma}}</span> сум
+                        </th>
+                        <th>
+                            <span class="localnumber">{{allMust}}</span> сум
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <table id="calc_table" style="display: none">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Имя и Фамилия</th>
+                        <th scope="col">Пол</th>
+                        <th scope="col">Номер телефона</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Оплата за договору</th>
+                        <th scope="col">Оплачено</th>
+                        <th scope="col">Остатка</th>
+                        <th scope="col">Тип оплаты</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each group.pupils}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td> {{name}}</td>
+                            <td>{{{gender}}}</td>
+                            <td>{{phone}}</td>
+                            <td>{{address}}</td>
+                            <td><a href="/pupils/more/{{_id}}"><span class="localnumber">{{price}}</span> сум</a></td>
+                            <td><span class="localnumber">{{summa}}</span> сум</td>
+                            <td>{{must}} сум</td>
+                            <td>{{pricetype}}</td>
+
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th >
+                            {{allPrice}} сум
+                        </th>
+                        <th>
+                            {{allSumma}} сум
+                        </th>
+                        <th>
+                            {{allMust}} сум
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updatepupil" tabindex="-1" aria-labelledby="updatepupil" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить ученик</h5>
+                <button type="button" class="btn-close" onclick="resetPupil()"  data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/pupils/savegroup" method="post" name="updatepupil" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="login" class="form-control" id="floatingInputPupil7" placeholder="Логин" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil7">Логин</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="password" name="password" class="form-control" id="floatingInputPupil8" placeholder="Пароль">
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil8">Новый пароль</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="name" class="form-control" id="floatingInputPupil9" placeholder="Фамилия и Имя" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil9">Фамилия и Имя</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="phone" class="form-control" id="floatingInputPupil10" placeholder="Номер телефона" required>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil10">Номер телефона</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="address" class="form-control" id="floatingInputPupil3" placeholder="Адрес">
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil3">Адрес</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="group" id="groupedit" class="form-control" id="floatingInputPupil11" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each allgroup}}
+                                        <option value="{{_id}}">{{numberclass}}-"{{typeclass}}"</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputPupil11">Выберите класс</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="price" class="form-control" id="floatingInputGroup7" placeholder="" required>
+                                <label for="floatingInputGroup7">Цена курс за год  (сум)</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="month" class="form-control" id="month" placeholder="" required>
+                                <label for="month">Цена курс за месяц  (сум)</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <select name="pricetype" class="form-control" id="pricetype" data-index='0'>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">годовой</option>
+                                    <option value="1">полгодовой</option>
+                                    <option value="2">ежемесячные</option>
+                                    <option value="3">кварталный</option>
+                                </select>
+                                <label for="pricetype">Выберите тип оплаты</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="gender" id="floatingInputPupil12" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">Мужской</option>
+                                    <option value="1">Женский</option>
+                                </select>
+                                <div class="invalid-feedback">Заполните поля</div>
+                                <label for="floatingInputPupil12">Пол</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="telegram" class="form-control" id="floatingInputPupil13" placeholder="Telegram аккаунт" >
+                                <label for="floatingInputPupil13">Telegram аккаунт</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var ExportToExcel = (function () {
+        // Define your style class template.
+        var style = "<style> th, td { border: 1px solid #000000; }</style>";
+        var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' + style + '</head><body><table>{table}</table></body></html>'
+                , base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        }
+                , format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+        }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById('calc_table')
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+<script>
+    let upFormPupil = document.forms.updatepupil
+    const editPupil = (id) => {
+        fetch(`/pupils/edit/${id}`)
+                .then(res => res.json())
+                .then(pupil => {
+                    console.log(pupil)
+                    upFormPupil._id.value = id
+                    upFormPupil.login.value = pupil.user.login
+                    upFormPupil.name.value = pupil.name
+                    upFormPupil.phone.value = pupil.phone
+                    upFormPupil.pricetype.value = pupil.pricetype || 0
+                    upFormPupil.address.value = pupil.address || ''
+                    upFormPupil.month.value = pupil.month || 0
+                    upFormPupil.gender.value = pupil.gender
+                    upFormPupil.telegram.value = pupil.telegram
+                    upFormPupil.group.value = pupil.group
+                    upFormPupil.price.value = pupil.price
+                }).catch(e=>console.error(e))
+    }
+</script>
+<style>
+    .formdata {
+        justify-content: flex-end;
+
+    }
+    
+    .formbtn {
+        margin-left: 10px;
+        background-color: green;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: white;
+    }
+    .formbtn:hover {
+        background-color: rgb(38, 116, 38);
+        color: #ccc;
+    }
+    .titletitle {
+        padding-top: 30px;
+    }
+</style>

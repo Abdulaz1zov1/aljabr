@@ -1,0 +1,127 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="category">
+                    <div class="col-6">
+                        <div class="mb-3 form-floating">
+                            <select name="course" id="course" class="form-control" id="floatingInput" data-index='0'>
+                                <option selected disabled value="">Выберите из списка</option>
+                                {{#each course}}
+                                    <option value="{{_id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                            <label for="floatingInput">Выберите направление</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3 form-floating">
+                            <button  class="btn btn-primary" onclick="selCategory()" >Начать тест</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tests">
+                    <div class="head_title d-flex justify-content-between">
+                            <h5 class="card-title">{{title}}</h5>
+                            <h5>Направление: <div id="coursename"></div> </h5>
+                        </div>
+                    <div id="testlist"></div>
+                    <button class="btn bg-primary" onclick="next()">Следуюшей</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    ul {
+        list-style-type: none;
+    }
+    li {
+        margin-bottom: 10px;
+        
+    }
+    input {
+        margin-right: 5px;
+        cursor: pointer;
+    }
+    label {
+        cursor: pointer;
+    }
+    .tests,
+    #testlist {
+        display: none;
+    }
+</style>
+
+
+<script>
+    
+    let category = document.querySelector('.category')
+    let testBox = document.getElementById('testlist')
+    let course = document.getElementById('course')
+    let courseName = document.getElementById('coursename')
+    let trueAns = 0
+    let falseAns = 0
+    let countTest = 0
+
+    function selCategory() {
+        if (course.value) {
+            category.style.display = "none"
+            testBox.style.display = "block"
+            document.querySelector('.tests').style.display = 'block'
+        }
+        fetch(`/test/gettests/${course.value}`)
+        .then(res => res.json())
+        .then(t => {
+            
+            let tests = t.map(test=> {
+                test.answers = shuffle(test.answers)
+                return test
+            })
+            console.log(tests)
+            tests.forEach((test,index) => {
+                testBox.innerHTML += `
+                    <div class="testnum_${index}" style="${index==0?'display:block':'display:none'}">
+                        <div>
+                            <h6>1.${test.question}</h6>
+                            <ul>
+                                <li>
+                                    <input type="radio" name="test" value="${test.answers[0]}" id="inputradio"><label for="inputradio">${test.answers[0]}</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="test" value="${test.answers[1]}" id="inputradio1"><label for="inputradio1">${test.answers[1]}</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="test" value="${test.answers[2]}" id="inputradio2"><label for="inputradio2">${test.answers[2]}</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="test" value="${test.answers[3]}" id="inputradio3"><label for="inputradio3">${test.answers[3]}</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>`
+            })
+        })
+    }
+
+    function next() {
+        document.querySelector(`.testnum_${countTest}`).style.display = 'none'
+        countTest++
+        document.querySelector(`.testnum_${countTest}`).style.display = 'block'
+    }
+
+
+    function shuffle(array) {
+        let currentIndex = array.length,  randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+    
+
+</script>

@@ -1,0 +1,235 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-4">
+                    <h5 class="card-title mb-0">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newtest">Добавить</button>
+                    </div>
+                </div>
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 27px;" aria-sort="ascending">№</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 332px;">Вопрос</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Направление</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 188px;">Правилный ответ</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 300px;">Неправилный ответы</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 88px;">Дата</th>
+                                    <th ></th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each test}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{question}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{correctanswer}}</td>
+                                        <td>{{answers}}</td>
+                                        <td>{{data}}</td>
+                                        <td class="text-right">
+                                            <button onclick="editTest('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updatetest" class="btn btn-warning ml-2">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <a href="/test/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                                <i class="fas fa-trash"></i></a>
+                                        </td>
+
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newtest" tabindex="-1" aria-labelledby="newtest" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить новый тест</h5>
+                <button type="button" class="btn-close" onclick="resetTest()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/test/" method="post" name="newtest" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="course" id="course" class="form-control" id="floatingInputTest1" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each course}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputTest1">Выберите направление</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <textarea name="question" id="question" class="form-control" cols="30" rows="30" required ></textarea>
+                                <label for="floatingInput">Задайте вопрос</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="correctanswer" class="form-control" id="floatingInputTest3" placeholder="" required>
+                                <label for="floatingInputTest3">Правилный ответ</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer1" class="form-control" id="floatingInputTest4" placeholder="" required>
+                                <label for="floatingInputTest4">Неправилный ответ №1</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer2" class="form-control" id="floatingInputTest5" placeholder="" required>
+                                <label for="floatingInputTest5">Неправилный ответ №2</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer3" class="form-control" id="floatingInputTest6" placeholder="" required>
+                                <label for="floatingInputTest3">Неправилный ответ №1</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="file" name="img" class="form-control" id="floatingInputTest7" placeholder="">
+                                <label for="floatingInputTest7">Выберите файл</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatetest" tabindex="-1" aria-labelledby="updatetest" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Редактировать тест</h5>
+                <button type="button" class="btn-close" onclick="resetTest()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/test/save" method="post" name="updatetest" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <select name="course" id="course2" class="form-control" id="floatingInputTest8" data-index='0' required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each course}}
+                                        <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <label for="floatingInputTest8">Выберите направление</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <textarea name="question" id="question2" class="form-control" cols="30" rows="30" required ></textarea>
+                                <label for="floatingInput2">Задайте вопрос</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="correctanswer" class="form-control" id="floatingInputTest10" placeholder="" required>
+                                <label for="floatingInputTest10">Правилный ответ</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer1" class="form-control" id="floatingInputTest11" placeholder="" required>
+                                <label for="floatingInputTest11">Неправилный ответ №1</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer2" class="form-control" id="floatingInputTest12" placeholder="" required>
+                                <label for="floatingInputTest12">Неправилный ответ №2</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="falseanswer3" class="form-control" id="floatingInputTest13" placeholder="" required>
+                                <label for="floatingInputTest13">Неправилный ответ №1</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img src="" alt="Фото нет" class="imgedit">
+                                </div>
+                                <div class="col-10">
+                                    <div class="mb-3 form-floating">
+                                        <input type="file" name="img" class="form-control" id="floatingInput14" placeholder="">
+                                        <label for="floatingInput14">Выберите файл</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .imgedit {
+        width: 80px;
+        height: 80px;
+    }
+</style>
+<script>
+    let newFormTest = document.forms.newtest
+    let upFormTest = document.forms.updatetest
+    let imgEdit = document.querySelector('.imgedit')
+    const editTest = (id) => {
+
+        fetch(`/test/edit/${id}`)
+                .then(res => res.json())
+                .then(test => {
+
+                    upFormTest._id.value = id
+                    upFormTest.question.value = test.question
+                    upFormTest.course.value = test.course
+                    upFormTest.correctanswer.value = test.correctanswer
+                    upFormTest.falseanswer1.value = test.falseanswer1
+                    upFormTest.falseanswer2.value = test.falseanswer2
+                    upFormTest.falseanswer3.value = test.falseanswer3
+                    if (test.img) {
+                        imgEdit.setAttribute('src',`/${test.img}`)
+                    } else {
+                        imgEdit.setAttribute('alt',`фото нет`)
+                    }
+                }).catch(e=>console.error(e))
+    }
+
+    function resetTest() {
+        newFormTest.reset()
+        upFormTest.reset()
+    }
+
+</script>

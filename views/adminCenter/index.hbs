@@ -1,0 +1,128 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <input type="text"  class="form-control mr-2" placeholder="Поиск">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newadminCenter">Добавить</button>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Логин</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Номер телефона</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each admincenter}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td>{{user.login}}</td>
+                            <td>{{name}}</td>
+                            <td>{{phone}}</td>
+                            <td class="text-right">
+                                <button onclick="editAdminCenter('{{_id}}')" data-bs-toggle="modal" data-bs-target="#upadminCenter" class="btn btn-warning ml-2">
+                                    <i class="fas fa-pen"></i></button>
+                                <a href="/admincenter/delete/{{_id}}" 
+                                    onclick="return confirm('Вы уверены?')" 
+                                    class="ml-2 btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newadminCenter" tabindex="-1" aria-labelledby="newadminCenter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить админ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admincenter/" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="login" class="form-control" id="floatingInputadminCenter" placeholder="Логин" required>
+                        <label for="floatingInputadminCenter">Логин</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="password" name="password" class="form-control" id="floatingInputadminCenter1" placeholder="Парол" required>
+                        <label for="floatingInputadminCenter1">Парол</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="name" class="form-control" id="floatingInputadminCenter2" placeholder="Название" required>
+                        <label for="floatingInputadminCenter2">Название</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="phone" class="form-control" id="floatingInputadminCenter3" placeholder="Номер телефона" required>
+                        <label for="floatingInputadminCenter3">Номер телефона</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="upadminCenter" tabindex="-1" aria-labelledby="upadminCenter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admincenter/save" method="post" name="upadmincenter" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="login" class="form-control" id="floatingInputadminCenter4" placeholder="Логин" required>
+                        <label for="floatingInputadminCenter4">Логин</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="password" name="password" class="form-control" id="floatingInputadminCenter5" placeholder="Парол">
+                        <label for="floatingInputadminCenter5">Новый парол</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="name" class="form-control" id="floatingInputadminCenter6" placeholder="Название" required>
+                        <label for="floatingInputadminCenter6">Название</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="phone" class="form-control" id="floatingInputadminCenter7" placeholder="Номер телефона" required>
+                        <label for="floatingInputadminCenter7">Номер телефона</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    let upFormAdminCenter = document.forms.upadmincenter
+    const editAdminCenter = (id) => {
+        fetch(`/admincenter/edit/${id}`)
+        .then(res => res.json())
+        .then(adminCenter => {
+            console.log(adminCenter)
+            upFormAdminCenter._id.value = id 
+            upFormAdminCenter.login.value = adminCenter.user.login
+            upFormAdminCenter.name.value = adminCenter.name
+            upFormAdminCenter.phone.value = adminCenter.phone
+            
+        }).catch(e=>console.error(e))
+    }
+
+</script>

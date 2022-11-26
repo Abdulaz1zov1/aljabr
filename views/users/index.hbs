@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-5">
+                    <h5 class="card-title">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <input type="text"  class="form-control mr-2" placeholder="Поиск">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newuser">Добавить</button>
+                    </div>
+                </div> 
+                <table class="table table-hover">
+                    <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Ф И О</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{name}}</td>
+                    <td>{{login}}</td>
+                    <td>{{role}}</td>
+                    <td> 
+                        <span class="badge {{class}}">{{status}}</span>
+                    </td>
+                    </td>
+                    <td class="text-right">
+                        <a href="/users/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                        <i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newuser" tabindex="-1" aria-labelledby="newuser" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить класс</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/users/" method="post" name="newuser" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="login" class="form-control" id="floatingInputUsers1" placeholder="" required>
+                        <label for="floatingInputUsers1">Логин</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="password" name="password" class="form-control" id="floatingInputUsers2" placeholder="" required>
+                        <label for="floatingInputUsers2">Парол</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="name" class="form-control" id="floatingInputUsers3" placeholder="" required>
+                        <label for="floatingInputUsers3">Имя и фамилия</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="role" id="role" class="form-control" id="floatingInputUsers4" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                                <option value="admin">admin</option>
+                                <option value="cash">cash</option>
+                                <option value="teacher">teacher</option>
+                                <option value="pupil">pupil</option>
+                        </select>
+                        <label for="floatingInputUsers4">Выберите рол</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" id="exampleCheck1" checked>
+                        <label class="form-check-label" for="exampleCheck1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

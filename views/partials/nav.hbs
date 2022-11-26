@@ -1,0 +1,129 @@
+<div class="page-header noprint">
+    <nav class="navbar navbar-expand-lg d-flex justify-content-between noprint">
+        <div class="" id="navbarNav">
+            <ul class="navbar-nav" id="leftNav">
+                <li class="nav-item">
+                    <a class="nav-link" id="sidebar-toggle" href="#"><i data-feather="arrow-left"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="logo d-flex align-items-center">
+            <a class="navbar-bran mr-2" href="/">
+                <img class="logosite mr-2" src="../../assets/images/abco.png" alt="" width="41px">
+            </a>
+            <div class="d-flex align-items-center  mt-2 ml-2 status">
+                {{statusOnline}}
+            </div>
+        </div>
+        <div class="" id="headerNav">
+            <ul class="navbar-nav">
+                {{!-- <li class="nav-item dropdown">
+                    <a class="nav-link search-dropdown" href="#" id="searchDropDown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false"><i data-feather="search"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-lg search-drop-menu"
+                        aria-labelledby="searchDropDown">
+                        <form>
+                            <input class="form-control" type="text" placeholder="напишите что нибудь.." aria-label="Search">
+                        </form>
+                        <h6 class="dropdown-header">Последные запросы</h6>
+                        <a class="dropdown-item" href="#">раскраска</a>
+                        <a class="dropdown-item" href="#">заказы</a>
+                    </div>
+                </li> --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link notifications-dropdown" href="#" id="notificationsDropDown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">1</a>
+                    <div class="dropdown-menu dropdown-menu-end notif-drop-menu"
+                        aria-labelledby="notificationsDropDown">
+                        <h6 class="dropdown-header">Уведомление</h6>
+                        <a href="#">
+                            <div class="header-notif d-flex">
+                                <div class="notif-image">
+                                    <span class="notification-badge bg-info text-white">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </span>
+                                </div>
+                                <div class="notif-text">
+                                    <p class="bold-notif-text">Заказа от Сардор Олимов</p>
+                                    <small>19:00</small>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link profile-dropdown mt-2" href="#" id="profileDropDown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{name}}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="profileDropDown">
+                        <button onclick="edit('{{userid}}')" class="dropdown-item btn-account" data-bs-toggle="modal" data-bs-target="#upuser">
+                            <i data-feather="user" class="mr-2"></i>Account</button>
+                        <a class="dropdown-item" href="#"><i data-feather="settings"></i>Настройки</a>
+                        <a class="dropdown-item" href="/auth/logout"><i data-feather="log-out"></i>Выйти</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="modal fade" id="upuser" tabindex="-1" aria-labelledby="upuser" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить логин или парол</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/users/savelogin" method="post" name="upusers" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="login" onblur="checkLogin(event.target.value)" class="form-control" id="floatingInput5" placeholder="Логин" required>
+                        <div class="logincheck">Такой логин есть </div>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInput5">Логин</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="password" name="password" class="form-control" id="floatingInput6" placeholder="Парол">
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInput6">Новый парол</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .page-header .navbar .logotype{
+        justify-content: space-between;
+        flex: 3;
+    }
+    .page-header .navbar .navbar-brand {
+        width: 80px;
+        height: 35px;
+    }
+    .btn-account:focus {
+        outline: 0;
+    }
+    .logincheck {
+        display: none;
+        color: red;
+        margin-left: 20px;
+    }
+</style>
+<script>
+    let upForm = document.forms.upusers
+    const edit = (userid) => {
+        fetch(`/users/editlogin/${userid}`)
+                .then(res => res.json())
+                .then(user => {
+                    console.log(user)
+                    upForm._id.value = user._id
+                    upForm.login.value = user.login
+                }).catch(e=>console.error(e))
+    }
+</script>

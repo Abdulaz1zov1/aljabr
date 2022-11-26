@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-5">
+                    <h5 class="card-title mb-0">{{title}}</h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newgroup">Добавить</button>
+                    </div>
+                </div>
+
+                <div id="zero-conf_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="zero-conf" class="display dataTable" style="width: 100%;" role="grid" aria-describedby="zero-conf_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="zero-conf"  aria-label="Name: activate to sort column descending" style="width: 25px;" aria-sort="ascending">№</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"  aria-label="Position: activate to sort column ascending" style="width: 232px;">Адрес филиала</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 100px;">Направление</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 100px;">Тип класса</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 140px;">Предподаватель класса</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Номер класса</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Количества учеников</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Цена курса</th>
+                                    <th class="sorting" tabindex="0" aria-controls="zero-conf"   aria-label="Office: activate to sort column ascending" style="width: 118px;">Статус</th>
+                                    <th ></th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each group}}
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{index}}</td>
+                                        <td>{{filial.title}}. {{filial.adress}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{typegroup.title}}</td>
+                                        <td>{{teacher.name}}</td>
+                                        <td>{{numberclass}}-"{{typeclass}}"</td>
+                                        <td>{{maxpupils}}  ученик</td>
+                                        <td>{{price}}  сум</td>
+                                        <td>
+                                            {{{status}}}
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick="editGroup('{{_id}}')" data-bs-toggle="modal" data-bs-target="#updategroup" class="btn btn-warning ml-2">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <a href="/group/delete/{{_id}}" onclick="return confirm('Вы уверены?')" class="ml-2 btn btn-danger">
+                                                <i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

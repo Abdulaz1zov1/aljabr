@@ -1,0 +1,180 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-center mb-4">
+                    <h5 class="card-title mb-0 d-flex justify-content-between align-center">
+                        {{title}} <b class="ml-2">{{monthTitle}}</b>
+                        <div class="others ml-2">
+                            {{#each otherSubjects}}
+                                <a href="/journal/more/{{_id}}">{{subject.title}}</a>
+                            {{/each}}
+                        </div>
+                    </h5>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary mr-2 excell-btn ml-2" onclick="ExportToExcel('xls')">Excell <i class="fas fa-file ml-2"></i></button>
+                        <button class="btn btn-info ml-2" data-bs-toggle="modal" data-bs-target="#newjournal">Добавить оценку</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered journal" id="calc_table">
+                        <thead>
+                        <tr class="pos">
+                            <th scope="col">№</th>
+                            <th scope="col">Ученик</th>
+                            {{#each dateList}}
+                                <th class="little">{{this}}</th>
+                            {{/each}}
+                            {{#if average}}
+                            <th scope="col">Общ</th>
+                            {{/if }}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each group.pupils}}
+                            <tr>
+                                <td>{{index}}</td>
+                                <td>{{name}}</td>
+                                {{#each marks}}
+                                    <td><b class="text-success">{{mark}}</b><b class="text-info">{{hwmark}}</b></td>
+                                {{/each}}
+                                {{#if average}}
+                                <td>{{summaMarks}}</td>
+                                {{/if}}
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newjournal" tabindex="-1" aria-labelledby="newjournal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/journal/mark" method="post" name="journal" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="{{journal._id}}">
+                    <div class="mb-3 form-floating">
+                        <select name="pupil" id="group" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each group.pupils}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="group">Выберите ученика</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="date" name="created" class="form-control" id="floatingInputPayment4" placeholder="Дата оценки" >
+                        <label for="floatingInputPayment4">Дата оценки</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="mark" class="form-control" id="mark" placeholder="" required>
+                        <label for="mark">Оценка</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="hwmark" class="form-control" id="mark" placeholder="" required>
+                        <label for="mark">Оценка за дз</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updatecours" tabindex="-1" aria-labelledby="updatecours" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изменить направление</h5>
+                <button type="button" class="btn-close" onclick="resetCourse()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/journal/save" method="post" name="updatecours" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="">
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="title" class="form-control" id="floatingInputCours1" placeholder="Название предмета" required>
+                        <div class="invalid-feedback">Заполните поля</div>
+                        <label for="floatingInputCours1">Название предмета</label>
+                    </div>
+                    <div class="mb-3 form-floating">
+                        <select name="course" id="course" class="form-control" id="floatingInputGroup" data-index='0'  required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each course}}
+                                <option value="{{_id}}">{{title}}</option>
+                            {{/each}}
+                        </select>
+                        <label for="floatingInputGroup">Выберите направление</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="status" value="1" class="form-check-input" checked id="exampleCheckCours2">
+                        <label class="form-check-label" for="exampleCheckCours2">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var ExportToExcel = (function () {
+        // Define your style class template.
+        var style = "<style> th, td { border: 1px solid #000000; }</style>";
+        var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' + style + '</head><body><table><tr><td colspan="2">{{title}} {{monthTitle}}</td></tr>{table}</table></body></html>'
+                , base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        }
+                , format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+        }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById('calc_table')
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+<script>
+    let newFormCourse = document.forms.newcours
+    let upFormCourse = document.forms.updatecours
+    let newJournal = document.forms.journal
+
+    const checkJournal = (group,subject) =>{
+        fetch(`/journal/check/${group}/${subject}`)
+                .then(res => res.json())
+                .then(res => {
+                    return res.data
+                })
+    }
+
+    const editCours = (id) => {
+        fetch(`/journal/get/${id}`)
+                .then(res => res.json())
+                .then(journal => {
+                    upFormCourse._id.value = id
+                    upFormCourse.title.value = journal.title
+                    upFormCourse.course.value = journal.course
+                    upFormCourse.status.checked = journal.status == 1 ? true : false
+                }).catch(e=>console.error(e))
+    }
+
+    function resetCourse() {
+        newFormCourse.reset()
+        upFormCourse.reset()
+    }
+
+
+
+</script>
