@@ -11,9 +11,7 @@ const flash = require('connect-flash') // !
 // const helmet = require('helmet')
 // const compression = require('compression')
 
-mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
-.then((console.log("mongodb connected")))
-.catch((err)=>{console.log("err database")})
+
 
 
 // Routerlar
@@ -105,7 +103,9 @@ app.use('/subject', require('./router/subject'))
 app.use('/journal', require('./router/journal'))
 // app.use('/genre',genreRouter)
 
-
+mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
+.then((console.log("mongodb connected")))
+.catch((err)=>{console.log("err database")})
 
 const PORT = process.env.PORT || 5003
 app.listen(PORT,()=>{
