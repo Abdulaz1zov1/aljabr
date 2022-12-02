@@ -109,18 +109,13 @@ app.use('/subject', require('./router/subject'))
 app.use('/journal', require('./router/journal'))
 // app.use('/genre',genreRouter)
 
-const PORT = process.env.PORT || 5003
 
-async function dev(){
-    try {
-        await mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
-        .then((console.log("mongodb connected")))
-        .catch((err)=>{console.log("err database")})
-        app.listen(PORT,()=>{
-            console.log(`Abco is running. ${PORT}`)
-        })
-    } catch (error) {
-        console.log(error)
-    }
-}
-dev()
+mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
+.then((console.log("mongodb connected")))
+.catch((err)=>{console.log("err database")})
+const PORT = process.env.PORT || 5003
+app.listen(PORT,()=>{
+    console.log(`Abco is running. ${PORT}`)
+})
+
+
