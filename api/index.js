@@ -11,6 +11,11 @@ const flash = require('connect-flash') // !
 // const helmet = require('helmet')
 // const compression = require('compression')
 
+mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
+.then((console.log("mongodb connected")))
+.catch((err)=>{console.log("err database")})
+
+
 // Routerlar
 const pageRouter = require('./router/page')
 const workerRouter = require('./router/worker') 
@@ -47,16 +52,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(__dirname+'/public')) 
 app.use('/images',express.static('images')) // !
 
-app.use(function (req, res, next) {
-
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-CSRF-Token');
-    // res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
+app.use(cors())
 
 const store = new MongoStore({
     collection: 'session',
@@ -110,9 +106,7 @@ app.use('/journal', require('./router/journal'))
 // app.use('/genre',genreRouter)
 
 
-mongoose.connect(keys.MONGODB_URI,{useNewUrlParser:true})
-.then((console.log("mongodb connected")))
-.catch((err)=>{console.log("err database")})
+
 const PORT = process.env.PORT || 5003
 app.listen(PORT,()=>{
     console.log(`Abco is running. ${PORT}`)
